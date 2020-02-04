@@ -1,0 +1,12 @@
+H = 0.100
+W = 0.100
+mH = 4.0
+mW = 4.0
+initial temperature = 100
+simulation time = 500
+simulation step time = 50
+alpha = 300
+conductivity = 25
+specific heat = 700
+density = 7800
+ambient temperature = 1200

@@ -1,0 +1,20 @@
+Iteration: 1 Time: 50/500
+Minimum temperature = 110.04 Maximum temperature = 365.82
+Iteration: 2 Time: 100/500
+Minimum temperature = 168.84 Maximum temperature = 502.59
+Iteration: 3 Time: 150/500
+Minimum temperature = 242.80 Maximum temperature = 587.37
+Iteration: 4 Time: 200/500
+Minimum temperature = 318.61 Maximum temperature = 649.39
+Iteration: 5 Time: 250/500
+Minimum temperature = 391.26 Maximum temperature = 700.07
+Iteration: 6 Time: 300/500
+Minimum temperature = 459.04 Maximum temperature = 744.06
+Iteration: 7 Time: 350/500
+Minimum temperature = 521.59 Maximum temperature = 783.38
+Iteration: 8 Time: 400/500
+Minimum temperature = 579.03 Maximum temperature = 818.99
+Iteration: 9 Time: 450/500
+Minimum temperature = 631.69 Maximum temperature = 851.43
+Iteration: 10 Time: 500/500
+Minimum temperature = 679.91 Maximum temperature = 881.06
