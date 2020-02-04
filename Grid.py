@@ -198,17 +198,16 @@ class Grid():
 
         self.P_global_vector*=(-1)
 
-        file = open('results.txt', 'w')
-
         dT = simulation_step
+        #Calculating {[H]+[H_BC]+[C]/dT}:
+        self.H_global_matrix = self.H_global_matrix + self.H_boundary_global_matrix + self.C_global_matrix/dT
+
+        file = open('results.txt', 'w')
         for step in range(steps):
 
             temperatures = np.zeros((self.nodes_number))
             for i in range(self.nodes_number):
                 temperatures[i] = self.nodes[i].value
-
-            #Calculating {[H]+[H_BC]+[C]/dT}:
-            H = self.H_global_matrix + self.H_boundary_global_matrix + self.C_global_matrix/dT
 
             #Wektor {[P]+{[C]/dT}*T0}:
             P = np.zeros((self.nodes_number, 1))
@@ -229,7 +228,7 @@ class Grid():
                 addedMatrix[i][self.nodes_number] = P[i]
 
                 for j in range(self.nodes_number):
-                    addedMatrix[i][j] = H[i][j]
+                    addedMatrix[i][j] = self.H_global_matrix[i][j]
 
             #Metoda Eliminacji Gausa
             temp = np.zeros((self.nodes_number + 1))
@@ -261,7 +260,7 @@ class Grid():
             min_temperature = "%.2f" %temperatures.min()
 
             iteration_info = str('Iteration: ' + str(step + 1) + ' Time: ' + str(int(dT*(step + 1)))+'/'+str(int(simulation_time)))
-            iteration_result = str('Minimum temperature = ' + str(min_temperature) + ' Maximum temperature = ' + str(max_temperature))
+            iteration_result = str('Minimum temperature = ' + str(min_temperature) + '[C]' + ' Maximum temperature = ' + str(max_temperature) + '[C]')
 
             print(iteration_info)
             print(iteration_result)
