@@ -229,7 +229,7 @@ class Grid():
                     
                 P[i] = self.P_global_vector[i] + C_columns_tmp
 
-            #Rozwiązanie układu równań metodą Gaussa
+            #Rozwiązanie układu równań wyznaczenie temperatur
             temperatures = np.array(np.dot(np.linalg.inv(self.H_global_matrix), P))
 
             max_temperature = "%.2f" %temperatures.max()
