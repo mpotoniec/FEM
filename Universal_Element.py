@@ -4,6 +4,8 @@ import numpy as np
 
 class UniversalElement():
     
+    '''Universal Element of Grid'''
+
     def __init__(self):
 
         self.dN_ksi = np.zeros((4,4))
