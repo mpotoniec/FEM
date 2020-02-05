@@ -2,6 +2,8 @@ import numpy as np
 
 def Create_Jacobian_Matrix(nodes_points, integral_point, universal_element):
 
+    '''Calculating Jacobian matrix'''
+
     jacobian = np.zeros((4))
 
     elements_nodes_x = nodes_points[0]
@@ -15,6 +17,8 @@ def Create_Jacobian_Matrix(nodes_points, integral_point, universal_element):
     return jacobian
 
 def Clalucate_Jacobian_Det(jacobian):
+
+    '''Calculating Jacobian det'''
 
     jacobian_for_det = jacobian.reshape(2,2)
 
