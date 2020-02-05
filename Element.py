@@ -5,6 +5,8 @@ import numpy as np
 
 class Element():
 
+    '''Element of grid'''
+
     def __init__(self, element_number :int):
         
         self.element_number = element_number
