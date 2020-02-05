@@ -8,6 +8,8 @@ import numpy as np
 
 class Grid():
 
+    '''Grid main class of program'''
+
     def __init__(self, filename = 'variables.txt'):
 
         self.filename = filename
