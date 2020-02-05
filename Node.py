@@ -2,6 +2,8 @@
 
 class Node():
     
+    '''Node of grid'''
+
     def __init__(self, node_number :int, x :float, y :float, boundary_condition :bool):
         
         self.node_number = node_number
