@@ -179,7 +179,7 @@ class Grid():
                 for column in range(4):
                     self.H_boundary_global_matrix[nodes_ids[row], nodes_ids[column]] += element.H_boundary_matrix[row, column] 
 
-    def calculate_transform(self, simulation_time=None,simulation_step=None,k=None,c=None,ro=None,alpha=None,t_ambient=None,inital_temperature=None): #todo
+    def calculate_transform(self, simulation_time=None,simulation_step=None,k=None,c=None,ro=None,alpha=None,t_ambient=None,inital_temperature=None, filename = 'results.txt'):
 
         variables = self.read_variables(self.filename)
 
@@ -209,7 +209,7 @@ class Grid():
         #Calculating {[H]+[H_BC]+[C]/dT}:
         self.H_global_matrix = self.H_global_matrix + self.H_boundary_global_matrix + self.C_global_matrix/dT
 
-        file = open('results.txt', 'w')
+        file = open(filename, 'w')
         for step in range(steps):
 
             step_start_time = time.time()
