@@ -245,7 +245,7 @@ class Grid():
             #print(iteration_result)
 
             file.write(iteration_info)
-            file.write('\n')
+            file.write(' ')
             file.write(iteration_result)
             file.write('\n')
             print('Step', step + 1 ,'done in:', str( "%.6f" %(time.time() - step_start_time)) + '[s]')
