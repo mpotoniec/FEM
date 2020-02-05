@@ -32,10 +32,13 @@ class Grid():
 
         self.universal_element = UniversalElement()
 
+        make_grid_start = time.time()
         self.create_nodes()
         self.create_elements()
         self.sort_elements_node_arrays()
         self.add_values((variables[4][0]).split(' ')[1], variables[4][1])
+        print('Making grid done in:', str( "%.6f" %(time.time() - make_grid_start)) + '[s]')
+
 
     def read_variables(self, filename):
 
@@ -191,10 +194,14 @@ class Grid():
 
         steps = int(simulation_time/simulation_step)
 
+        start_program_time = time.time()
+
+        calculating_globals = time.time()
         self.H_global_matrix_create(k)
         self.C_global_matrix_create(c, ro)
         self.H_boundary_global_matrix_create(alpha)
         self.P_global_vector_create(alpha, t_ambient)
+        print('Calculating global matrices done in:', str( "%.6f" %(time.time() - calculating_globals)) + '[s]')
 
         self.P_global_vector*=(-1)
 
@@ -205,6 +212,7 @@ class Grid():
         file = open('results.txt', 'w')
         for step in range(steps):
 
+            step_start_time = time.time()
             temperatures = np.zeros((self.nodes_number))
             for i in range(self.nodes_number):
                 temperatures[i] = self.nodes[i].value
@@ -221,53 +229,26 @@ class Grid():
                     
                 P[i] = self.P_global_vector[i] + C_columns_tmp
 
-            #Tworzenie macierzy H + P (nodes x nodes + 1)
-            addedMatrix = np.zeros((self.nodes_number, self.nodes_number + 1))
-
-            for i in range(self.nodes_number):
-                addedMatrix[i][self.nodes_number] = P[i]
-
-                for j in range(self.nodes_number):
-                    addedMatrix[i][j] = self.H_global_matrix[i][j]
-
-            #Metoda Eliminacji Gausa
-            temp = np.zeros((self.nodes_number + 1))
-            k = int(0)
-            for i in range(self.nodes_number - 1):
-                
-                k+=1
-                
-                for l in range(k):
-                    
-                    for j in range(self.nodes_number + 1):
-                        temp[j] = addedMatrix[l][j]*addedMatrix[k][l]/addedMatrix[l][l]
-
-                    for j in range(self.nodes_number + 1):
-                        addedMatrix[k][j] -= temp[j] 
-
-            for i in range(self.nodes_number, 0, -1):
-
-                sub = addedMatrix[i - 1, self.nodes_number]
-                for j in range(self.nodes_number, i, -1):
-                    sub -= addedMatrix[i - 1][j - 1]*temperatures[j - 1]
-                
-                temperatures[i - 1] = sub/addedMatrix[i - 1, i - 1]
-
-            for i in range(self.nodes_number):
-                self.nodes[i].value = temperatures[i]
+            #Rozwiązanie układu równań metodą Gaussa
+            temperatures = np.array(np.dot(np.linalg.inv(self.H_global_matrix), P))
 
             max_temperature = "%.2f" %temperatures.max()
             min_temperature = "%.2f" %temperatures.min()
 
+            for i in range(self.nodes_number):
+                self.nodes[i].value = temperatures[i]
+
             iteration_info = str('Iteration: ' + str(step + 1) + ' Time: ' + str(int(dT*(step + 1)))+'/'+str(int(simulation_time)))
             iteration_result = str('Minimum temperature = ' + str(min_temperature) + '[C]' + ' Maximum temperature = ' + str(max_temperature) + '[C]')
 
-            print(iteration_info)
-            print(iteration_result)
+            #print(iteration_info)
+            #print(iteration_result)
 
             file.write(iteration_info)
             file.write('\n')
             file.write(iteration_result)
             file.write('\n')
+            print('Step', step + 1 ,'done in:', str( "%.6f" %(time.time() - step_start_time)) + '[s]')
 
-        file.close()            
+        file.close()
+        print('Program Executed in:', str( "%.6f" %(time.time() - start_program_time)) + '[s]')            
