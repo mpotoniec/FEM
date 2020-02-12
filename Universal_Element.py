@@ -4,7 +4,7 @@ import numpy as np
 
 class UniversalElement():
     
-    '''Universal Element of Grid'''
+    '''Universal Element of Grid with four matrices'''
 
     def __init__(self):
 
