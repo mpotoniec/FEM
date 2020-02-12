@@ -2,9 +2,9 @@ from Element import Element
 from Node import Node
 from Universal_Element import UniversalElement
 
-import time
-
 import numpy as np
+
+import time
 
 class Grid():
 
@@ -67,8 +67,8 @@ class Grid():
         y = 0
         x = 0
 
-        dy = self.high/ (self.nodes_in_high - 1) #todo
-        dx = self.width/ (self.nodes_in_width - 1) #todo
+        dy = self.high/ (self.nodes_in_high - 1)
+        dx = self.width/ (self.nodes_in_width - 1)
 
         for width in range(0, self.nodes_in_width, 1):
 
@@ -90,7 +90,7 @@ class Grid():
             
             x+=dx
 
-    def create_elements(self): #todo
+    def create_elements(self):
 
         element_number = int(1)
         high = 1
@@ -98,16 +98,16 @@ class Grid():
         a = -1
         b = self.nodes_in_high
 
-        for element in range(self.elements_number): #Pętla w Po liczbie elementów mE max liczba elementów. Pierwszy element = 0.
+        for element in range(self.elements_number):
             
             self.elements.append(Element(element_number))
 
-            if high == self.nodes_in_high: #Warunek czy doszliśmy do końca wysokości.
+            if high == self.nodes_in_high:
                 a+=1
                 b+=1
                 high = 1
 
-            for j in range(4): #Pętla po 4 nodach w elemencie
+            for j in range(4):
 
                 if((j == 0) or (j == 1)): self.elements[element].nodes_array.append(self.nodes[j + element_number + a])
                 else: self.elements[element].nodes_array.append(self.nodes[j + element_number + b - 3])
@@ -156,9 +156,6 @@ class Grid():
                     self.C_global_matrix[nodes_ids[row], nodes_ids[column]] += element.C_matrix[row, column]
 
     def P_global_vector_create(self, alpha, t_ambient):
-        
-        '''This grid function is resposible of calculating global P vector of grid.
-            It takes a alpha coefficient and ambient temperature.'''
         
         for element in self.elements:
 
@@ -231,9 +228,9 @@ class Grid():
                     
                 P[i] = self.P_global_vector[i] + C_columns_tmp
 
-            #Rozwiązanie układu równań wyznaczenie temperatur
-            temperatures = np.array(np.dot(np.linalg.inv(self.H_global_matrix), P))
-
+            #Wyznaczenie temperatur dla danej iteracji rozwiązanie równani liniowego
+            temperatures = np.linalg.solve(self.H_global_matrix, P)
+                
             max_temperature = "%.2f" %temperatures.max()
             min_temperature = "%.2f" %temperatures.min()
 
@@ -243,14 +240,14 @@ class Grid():
             iteration_info = str('Iteration: ' + str(step + 1) + ' Time: ' + str(int(dT*(step + 1)))+'/'+str(int(simulation_time)))
             iteration_result = str('Minimum temperature = ' + str(min_temperature) + '[C]' + ' Maximum temperature = ' + str(max_temperature) + '[C]')
 
-            #print(iteration_info)
-            #print(iteration_result)
+            print(iteration_info)
+            print(iteration_result)
+            print('Step', step + 1 ,'done in:', str( "%.6f" %(time.time() - step_start_time)) + '[s]')
 
             file.write(iteration_info)
             file.write(' ')
             file.write(iteration_result)
             file.write('\n')
-            print('Step', step + 1 ,'done in:', str( "%.6f" %(time.time() - step_start_time)) + '[s]')
 
         file.close()
-        print('Program Executed in:', str( "%.6f" %(time.time() - start_program_time)) + '[s]')            
+        print('Program Executed in:', str( "%.6f" %(time.time() - start_program_time)) + '[s]')       
