@@ -17,4 +17,4 @@ dN_deta = (lambda ksi: -0.25*(1-ksi), \
            lambda ksi: 0.25*(1+ksi),  \
            lambda ksi: 0.25*(1-ksi))
 #Integral points
-integral_points1 = [[-1./(3.**0.5), 1.], [1./(3.**0.5), 1.]]
+integral_points = [[-1./(3.**0.5), 1.], [1./(3.**0.5), 1.]]
