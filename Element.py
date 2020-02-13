@@ -1,4 +1,3 @@
-from Functions_Data import shape_function1D, shape_function2D, integral_points
 from Jacobian import Create_Jacobian_Matrix, Clalucate_Jacobian_Det, Create_Jacobian_div_Det_Matrix
 
 import numpy as np
@@ -11,6 +10,17 @@ class Element():
         
         self.element_number = element_number
         self.nodes_array = []
+
+        #N1, N2 funkcje kształtu 1D
+        self.shape_function1D = (lambda ksi: 0.5*(1 - ksi), \
+                                 lambda ksi: 0.5*(ksi + 1))
+        #N1, N2, N3, N4 funkcje kształtu 2D
+        self.shape_function2D = (lambda ksi, eta: 0.25*(1-ksi)*(1-eta), \
+                                 lambda ksi, eta: 0.25*(1+ksi)*(1-eta), \
+                                 lambda ksi, eta: 0.25*(1+ksi)*(1+eta), \
+                                 lambda ksi, eta: 0.25*(1-ksi)*(1+eta))
+        #Punkty całkowania dla dwupunktowego schematu:
+        self.integral_points = [[-1./(3.**0.5), 1.], [1./(3.**0.5), 1.]]
 
         self.H_boundary_matrix = np.zeros((4,4))
         self.H_matrix = np.zeros((4,4))
@@ -80,11 +90,11 @@ class Element():
         if edges_with_boundary_condition[0] != None: #Powierzchnia 1
             field1_N = []
             for integral_point in range(2):
-                ksi = integral_points[integral_point][0]
-                eta = integral_points[integral_point][1]*(-1)
+                ksi = self.integral_points[integral_point][0]
+                eta = self.integral_points[integral_point][1]*(-1)
 
-                N1 = shape_function2D[0](ksi, eta)
-                N2 = shape_function2D[1](ksi, eta)
+                N1 = self.shape_function2D[0](ksi, eta)
+                N2 = self.shape_function2D[1](ksi, eta)
         
                 tmp_array = np.zeros((4,4))
 
@@ -102,11 +112,11 @@ class Element():
         if edges_with_boundary_condition[1] != None: #Powierzchnia 2
             field2_N = []
             for integral_point in range(2):
-                ksi = integral_points[integral_point][1]
-                eta = integral_points[integral_point][0]
+                ksi = self.integral_points[integral_point][1]
+                eta = self.integral_points[integral_point][0]
 
-                N2 = shape_function2D[1](ksi, eta)
-                N3 = shape_function2D[2](ksi, eta)
+                N2 = self.shape_function2D[1](ksi, eta)
+                N3 = self.shape_function2D[2](ksi, eta)
         
                 tmp_array = np.zeros((4,4))
 
@@ -124,11 +134,11 @@ class Element():
         if edges_with_boundary_condition[2] != None: #Powierzchnia 3
             field3_N = []
             for integral_point in range(2):
-                ksi = integral_points[1 - integral_point][0]
-                eta = integral_points[integral_point][1]
+                ksi = self.integral_points[1 - integral_point][0]
+                eta = self.integral_points[integral_point][1]
 
-                N3 = shape_function2D[2](ksi, eta)
-                N4 = shape_function2D[3](ksi, eta)
+                N3 = self.shape_function2D[2](ksi, eta)
+                N4 = self.shape_function2D[3](ksi, eta)
         
                 tmp_array = np.zeros((4,4))
 
@@ -146,11 +156,11 @@ class Element():
         if edges_with_boundary_condition[3] != None: #Powierzchnia 4
             field4_N = []
             for integral_point in range(2):
-                ksi = integral_points[integral_point][1]*(-1)
-                eta = integral_points[1 - integral_point][0] 
+                ksi = self.integral_points[integral_point][1]*(-1)
+                eta = self.integral_points[1 - integral_point][0] 
 
-                N1 = shape_function2D[0](ksi, eta)
-                N4 = shape_function2D[3](ksi, eta)
+                N1 = self.shape_function2D[0](ksi, eta)
+                N4 = self.shape_function2D[3](ksi, eta)
         
                 tmp_array = np.zeros((4,4))
 
@@ -189,8 +199,8 @@ class Element():
         
             for i in range(4):
 
-                dN_dx[integral_point][i] = universal_element.dN_ksi[integral_point][i]*jacobian_div_det_matrix[integral_point][0] + universal_element.dN_eta[integral_point][i]*jacobian_div_det_matrix[integral_point][1] 
-                dN_dy[integral_point][i] = universal_element.dN_ksi[integral_point][i]*jacobian_div_det_matrix[integral_point][2] + universal_element.dN_eta[integral_point][i]*jacobian_div_det_matrix[integral_point][3]
+                dN_dx[integral_point][i] = universal_element.dN_ksi_matrix[integral_point][i]*jacobian_div_det_matrix[integral_point][0] + universal_element.dN_eta_matrix[integral_point][i]*jacobian_div_det_matrix[integral_point][1] 
+                dN_dy[integral_point][i] = universal_element.dN_ksi_matrix[integral_point][i]*jacobian_div_det_matrix[integral_point][2] + universal_element.dN_eta_matrix[integral_point][i]*jacobian_div_det_matrix[integral_point][3]
 
         #Tworzenie {dN/x}{dN/dx}T {dN/y}{dN/dy}T
         for integral_point in range(4):
@@ -255,7 +265,7 @@ class Element():
 
         N = np.zeros(shape = (2, 1))
         for i in range(2):
-            N += np.array([[shape_function1D[0](integral_points[i][0]), shape_function1D[1](integral_points[i][0])]]).reshape(2, 1)
+            N += np.array([[self.shape_function1D[0](self.integral_points[i][0]), self.shape_function1D[1](self.integral_points[i][0])]]).reshape(2, 1)
 
         for i in range(4):
             if edges_with_boundary_condition[i] != None:
