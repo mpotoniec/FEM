@@ -178,7 +178,7 @@ class Grid():
                 for column in range(4):
                     self.H_boundary_global_matrix[nodes_ids[row], nodes_ids[column]] += element.H_boundary_matrix[row, column] 
 
-    def calculate_transform(self, simulation_time=None,simulation_step=None,k=None,c=None,ro=None,alpha=None,t_ambient=None,inital_temperature=None, filename='results.txt'):
+    def calculate(self, simulation_time=None,simulation_step=None,k=None,c=None,ro=None,alpha=None,t_ambient=None,inital_temperature=None, filename='results.txt'):
 
         variables = self.read_variables(self.filename)
 
@@ -228,7 +228,7 @@ class Grid():
                     
                 P[i] = self.P_global_vector[i] + C_columns_tmp
 
-            #Wyznaczenie temperatur dla danej iteracji rozwiązanie równani liniowego
+            #Wyznaczenie temperatur dla danej iteracji
             temperatures = np.linalg.solve(self.H_global_matrix, P)
                 
             max_temperature = "%.2f" %temperatures.max()
