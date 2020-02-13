@@ -9,10 +9,10 @@ def Create_Jacobian_Matrix(nodes_points, integral_point, universal_element):
     elements_nodes_x = nodes_points[0]
     elements_nodes_y = nodes_points[1]
     
-    jacobian[0] = np.dot(universal_element.dN_ksi[integral_point], elements_nodes_x)
-    jacobian[1] = np.dot(universal_element.dN_ksi[integral_point], elements_nodes_y)  
-    jacobian[2] = np.dot(universal_element.dN_eta[integral_point], elements_nodes_x) 
-    jacobian[3] = np.dot(universal_element.dN_eta[integral_point], elements_nodes_y) 
+    jacobian[0] = np.dot(universal_element.dN_ksi_matrix[integral_point], elements_nodes_x)
+    jacobian[1] = np.dot(universal_element.dN_ksi_matrix[integral_point], elements_nodes_y)  
+    jacobian[2] = np.dot(universal_element.dN_eta_matrix[integral_point], elements_nodes_x) 
+    jacobian[3] = np.dot(universal_element.dN_eta_matrix[integral_point], elements_nodes_y) 
     
     return jacobian
 
