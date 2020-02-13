@@ -16,6 +16,7 @@ class UniversalElement():
                         lambda ksi: -0.25*(1+ksi), \
                         lambda ksi: 0.25*(1+ksi),  \
                         lambda ksi: 0.25*(1-ksi))
+        #N1, N2, N3, N4 funkcje kształtu 2D
         self.shape_function2D = (lambda ksi, eta: 0.25*(1-ksi)*(1-eta), \
                                  lambda ksi, eta: 0.25*(1+ksi)*(1-eta), \
                                  lambda ksi, eta: 0.25*(1+ksi)*(1+eta), \
